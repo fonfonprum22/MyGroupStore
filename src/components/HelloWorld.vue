@@ -1,11 +1,11 @@
 <template>
   <div class="form">
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-card >
+      <v-card>
         <v-card-title> Form </v-card-title>
         <v-card-subtitle> Input Data Information </v-card-subtitle>
         <v-card-text>
-           <v-row>
+          <v-row>
             <v-col>
               <v-text-field
                 :rules="[(v) => !!v || 'Code is required']"
@@ -52,7 +52,6 @@
                 required
               />
             </v-col>
-            
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -70,6 +69,8 @@
 </template>
 
 <script>
+import admin from "firebase-admin";
+import db from "firebase";
 export default {
   name: "HelloWorld",
   data: () => ({
@@ -102,12 +103,18 @@ export default {
       },
     ],
     desserts: [],
+    db:'',
+    docRef:'',
   }),
   methods: {
     submit() {
       this.employee.push(this.form);
-      this.form = {};
-      this.$store.commit("addStudent", this.employee);
+      // this.form = {};
+      // this.$store.commit("addStudent", this.employee);
+      this.db = admin.firestore();
+      this.docRef = this.db.collection("users").doc("alovelace");
+      docRef.set(this.form)
+
     },
   },
   updated() {
@@ -117,10 +124,8 @@ export default {
 </script>
 <style >
 .form {
-    background-color: rgb(152, 224, 226);
-    justify-content: center;
-    padding: 150px;
-    
+  background-color: rgb(152, 224, 226);
+  justify-content: center;
+  padding: 150px;
 }
-
 </style>
